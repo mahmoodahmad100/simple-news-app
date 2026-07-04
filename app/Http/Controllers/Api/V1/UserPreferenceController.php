@@ -22,8 +22,8 @@ class UserPreferenceController extends Controller
      */
     public function update(UpdateUserPreferenceRequest $request): UserPreferenceResource
     {
-        $this->userPreferenceService->update($request->user(), $request->validated());
-        return new UserPreferenceResource([]);
+        $preferences = $this->userPreferenceService->update($request->user(), $request->validated());
+        return new UserPreferenceResource($preferences);
     }
 
     /**
