@@ -43,35 +43,4 @@ class Article extends Model
     {
         return $this->belongsToMany(Category::class);
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Query Scopes
-    |--------------------------------------------------------------------------
-    */
-
-    public function scopeSearch(Builder $query, ?string $term): Builder
-    {
-        return $query->when($term, function ($q) use ($term) {
-            $q->where('title', 'ILIKE', "%{$term}%")
-              ->orWhere('description', 'ILIKE', "%{$term}%");
-        });
-    }
-
-    public function scopeForSource(Builder $query, ?int $sourceId): Builder
-    {
-        return $query->when($sourceId, fn ($q) => $q->where('source_id', $sourceId));
-    }
-
-    public function scopeForCategory(Builder $query, ?int $categoryId): Builder
-    {
-        return $query->when($categoryId, function ($q) use ($categoryId) {
-            $q->whereHas('categories', fn ($q2) => $q2->where('categories.id', $categoryId));
-        });
-    }
-
-    public function scopeForAuthor(Builder $query, ?int $authorId): Builder
-    {
-        return $query->when($authorId, fn ($q) => $q->where('author_id', $authorId));
-    }
 }

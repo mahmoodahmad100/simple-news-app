@@ -4,29 +4,29 @@ namespace App\Repositories;
 
 use App\Contracts\Repositories\ArticleRepositoryInterface;
 use App\Models\Article;
+use App\Filters\ArticleFilter;
 
 class ArticleRepository implements ArticleRepositoryInterface
 {
+    private const RELATIONS = [
+        'source',
+        'author',
+        'categories',
+    ];
+
     public function paginate(array $filters): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        /**
-         * @TODO: this is a simple implementation for now just for testing the flow (controller -> service -> repository).
-         */
-        $query = Article::query();
+        $query = Article::query()->with(self::RELATIONS);
 
-        if (isset($filters['title'])) {
-            $query->where('title', 'like', '%' . $filters['title'] . '%');
-        }
+        (new ArticleFilter($query, $filters))->apply();
 
-        if (isset($filters['author'])) {
-            $query->where('author', 'like', '%' . $filters['author'] . '%');
-        }
-
-        return $query->paginate(10);
+        return $query->paginate($filters['per_page'] ?? 15);
     }
 
     public function findOrFail(int $id): Article
     {
-        return Article::findOrFail($id);
+        return Article::query()
+            ->with(self::RELATIONS)
+            ->findOrFail($id);
     }
 }
