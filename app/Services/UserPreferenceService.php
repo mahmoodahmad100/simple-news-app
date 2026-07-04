@@ -11,14 +11,14 @@ class UserPreferenceService
         private readonly UserRepositoryInterface $userRepository,
     ) {}
 
-    public function update(User $user, array $data): array
+    public function update(User $user, array $data): object
     {
         $this->userRepository->update($user, ['preferences' => $data]);
-        return $data;
+        return (object)$data;
     }
 
-    public function get(User $user): array
+    public function get(User $user): object
     {
-        return $user->preferences ?? [];
+        return (object)($user->preferences ?? []);
     }
 }

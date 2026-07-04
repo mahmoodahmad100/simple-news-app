@@ -9,7 +9,9 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/login', [AuthController::class, 'login']);
     Route::apiResource('articles', ArticleController::class)
         ->only(['index', 'show']);
-    Route::apiResource('preferences', UserPreferenceController::class)
-        ->only(['update', 'index'])
-        ->middleware('auth:sanctum');
+        
+    Route::group(['prefix' => 'preferences', 'middleware' => 'auth:sanctum'], function () {
+        Route::get('/', [UserPreferenceController::class, 'get']);
+        Route::put('/', [UserPreferenceController::class, 'update']);
+    });
 });
