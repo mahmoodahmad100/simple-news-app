@@ -8,5 +8,6 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('articles', ArticleController::class)
         ->only(['index', 'show']);
     Route::apiResource('preferences', UserPreferenceController::class)
-        ->only(['update', 'show']);
+        ->only(['update', 'show'])
+        ->middleware('auth:sanctum');
 });
