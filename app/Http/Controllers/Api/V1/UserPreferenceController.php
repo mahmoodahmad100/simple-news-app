@@ -27,9 +27,9 @@ class UserPreferenceController extends Controller
     }
 
     /**
-     * Get the specified user preference.
+     * Get the specified user preferences.
      */
-    public function show(): UserPreferenceResource
+    public function index(): UserPreferenceResource
     {
         return new UserPreferenceResource($this->userPreferenceService->get(request()->user()));
     }
