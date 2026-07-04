@@ -14,6 +14,13 @@ class ArticleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'content' => $this->content,
+            'slug' => $this->slug,
+            'url' => $this->url,
+            'published_at' => $this->published_at,
+        ];
     }
 }
