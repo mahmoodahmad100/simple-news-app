@@ -22,8 +22,10 @@ class NyTimesProvider implements NewsProviderInterface
             imageUrl: $item['imageUrl'] ?? null,
             externalId: $item['id'],
             authorName: $item['author'] ?? null,
-            category: $item['category'] ?? null,
+            authorExternalId: $item['authorId'] ?? null,
+            categories: $item['categories'] ?? null,
             publishedAt: $item['publishedAt'] ?? null,
+            metadata: $item['metadata'] ?? [],
         );
     }
 }
