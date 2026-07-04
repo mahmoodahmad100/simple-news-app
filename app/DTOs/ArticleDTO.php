@@ -2,6 +2,7 @@
 
 namespace App\DTOs;
 
+use Carbon\Carbon;
 class ArticleDTO
 {
     public function __construct(
@@ -11,8 +12,14 @@ class ArticleDTO
         public ?string $url,
         public ?string $imageUrl,
         public ?string $externalId,
+
         public ?string $authorName,
-        public ?string $category,
-        public ?string $publishedAt,
+        public ?string $authorExternalId,
+
+        public array $categories = [],
+
+        public ?Carbon $publishedAt = null,
+
+        public array $metadata = [],
     ) {}
 }

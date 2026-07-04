@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use App\Enums\NewsProvider;
 use App\Jobs\SyncNewsProvider;
 
-#[Signature('app:sync-news-command')]
+#[Signature('news:sync')]
 #[Description('Sync News Command')]
 class SyncNewsCommand extends Command
 {

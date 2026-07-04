@@ -4,19 +4,28 @@ namespace App\Services;
 
 use App\Factories\NewsProviderFactory;
 use App\Models\Source;
+use Throwable;
 
 class NewsSyncService
 {
+    public function __construct(
+        private readonly NewsProviderFactory $providerFactory,
+        private readonly ArticleIngestionService $articleIngestionService,
+    ) {
+    }
+
     public function sync(Source $source): void
     {
-        $provider = NewsProviderFactory::make($source->provider);
+        $provider = $this->providerFactory->make($source->provider);
 
-        $articles = $provider->fetchArticles();
+        foreach ($provider->fetchArticles() as $item) {
+            try {
+                $dto = $provider->transform($item);
 
-        foreach ($articles as $item) {
-            $dto = $provider->transform($item);
-
-            app(ArticleIngestionService::class)->store($dto, $source);
+                $this->articleIngestionService->store($dto, $source);
+            } catch (Throwable $exception) {
+                report($exception);
+            }
         }
     }
 }
