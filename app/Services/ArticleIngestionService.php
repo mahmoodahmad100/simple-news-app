@@ -17,14 +17,15 @@ class ArticleIngestionService
         return DB::transaction(function () use ($dto, $source) {
 
             $author = $this->resolveAuthor($dto, $source);
+            $slug = Str::slug($dto->title . '-' . $source->id);
 
             $article = Article::updateOrCreate(
                 [
-                    'external_id' => $dto->externalId,
+                    'slug' => $slug,
                     'source_id' => $source->id,
                 ],
                 [
-                    'slug' => Str::slug($dto->title . '-' . $source->id),
+                    'slug' => $slug,
                     'author_id' => $author?->id,
                     'title' => $dto->title,
                     'description' => $dto->description,

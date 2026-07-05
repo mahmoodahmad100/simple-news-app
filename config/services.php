@@ -42,5 +42,9 @@ return [
         'base_url' => env('NEWSAPI_BASE_URL', 'https://newsapi.org/v2'),
         'api_key' => env('NEWSAPI_KEY'),
     ],
-
+    'nytimes' => [
+        'base_url' => env('NYTIMES_BASE_URL', 'https://api.nytimes.com/svc'),
+        'api_key' => env('NYTIMES_API_KEY'),
+    ],
+    
 ];
