@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'guardian' => [
+        'base_url' => env('GUARDIAN_BASE_URL') ?? 'https://content.guardianapis.com',
+        'api_key' => env('GUARDIAN_API_KEY'),
+    ],
 
 ];

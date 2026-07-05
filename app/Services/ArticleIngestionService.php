@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\DTOs\ArticleDTO;
 use App\Models\Article;
 use App\Models\Author;
 use App\Models\Source;
+use App\Models\Category;
 
 class ArticleIngestionService
 {
@@ -22,6 +24,7 @@ class ArticleIngestionService
                     'source_id' => $source->id,
                 ],
                 [
+                    'slug' => Str::slug($dto->title . '-' . $source->id),
                     'author_id' => $author?->id,
                     'title' => $dto->title,
                     'description' => $dto->description,
@@ -50,8 +53,21 @@ class ArticleIngestionService
 
     private function syncCategories(Article $article, ArticleDTO $dto): void
     {
-        if (!empty($dto->categories)) {
-            $article->categories()->sync($dto->categories);
+        if (empty($dto->categories)) {
+            return;
         }
+
+        $categoryIds = collect($dto->categories)
+            ->filter()
+            ->map(function ($name) use ($article) {
+                return Category::firstOrCreate([
+                    'name' => $name,
+                    'slug' => Str::slug($name)
+                ])->id;
+            })
+            ->values()
+            ->all();
+
+        $article->categories()->sync($categoryIds);
     }
 }

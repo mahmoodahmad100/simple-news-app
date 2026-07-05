@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Factories\NewsProviderFactory;
 use App\Models\Source;
+use App\Enums\NewsProvider;
 use Throwable;
 
 class NewsSyncService
@@ -16,12 +17,10 @@ class NewsSyncService
 
     public function sync(Source $source): void
     {
-        $provider = $this->providerFactory->make($source->provider);
+        $provider = $this->providerFactory->make(NewsProvider::from($source->provider));
 
-        foreach ($provider->fetchArticles() as $item) {
+        foreach ($provider->fetchArticles() as $dto) {
             try {
-                $dto = $provider->transform($item);
-
                 $this->articleIngestionService->store($dto, $source);
             } catch (Throwable $exception) {
                 report($exception);
