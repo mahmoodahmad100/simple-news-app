@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->longText('content')->nullable();
-            $table->string('url')->unique();
-            $table->string('image_url')->nullable();
+            $table->text('url')->unique();
+            $table->text('image_url')->nullable();
             $table->string('hash')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamp('published_at')->nullable();
