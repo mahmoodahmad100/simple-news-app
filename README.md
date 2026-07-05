@@ -16,6 +16,13 @@ A backend system built with Laravel for aggregating news articles from multiple 
 
 ---
 
+## 🧠 Tests
+to run the test: `php artisan test` and you will get a simmlar result to the below image:
+![test results](tests.png)
+...
+
+---
+
 ## Improvements
 
 ## 🔐 User Preferences Storage

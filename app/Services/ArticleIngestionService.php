@@ -25,6 +25,7 @@ class ArticleIngestionService
                     'source_id' => $source->id,
                 ],
                 [
+                    'external_id' => $dto->externalId,
                     'slug' => $slug,
                     'author_id' => $author?->id,
                     'title' => $dto->title,
