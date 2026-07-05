@@ -88,7 +88,125 @@ Provides clean and consistent JSON responses.
 ## 🧪 Tests
 
 Run all tests:
-![test results](tests.png)
 
 ```bash
 php artisan test
+```
+
+### Test Coverage
+* API feature tests (listing, filtering, single article)
+* Ingestion tests (DTO → DB persistence)
+* Duplication prevention tests
+
+### Test Result Example
+![test results](tests.png)
+
+---
+
+## 🧠 Design Decisions
+
+### DTO-based ingestion
+* Decouples external APIs from domain logic.
+
+### Repository pattern
+* Keeps controllers thin and query logic reusable.
+
+### Queue-based sync
+* Ensures scalable and non-blocking ingestion.
+
+### JSON user preferences
+* Simple and flexible initial approach.
+
+---
+
+## 🧠 Potential Enhancements (Future Considerations)
+
+### 1. Improve deduplication strategy
+* Enforce unique constraint on `(external_id, source_id)`
+
+### 2. Improve provider orchestration
+* Rate limiting per provider
+* Retry policies
+* Circuit breaker pattern
+* requests on other data if applicable (pagination)
+
+### 3. Add caching layer
+* Redis caching for articles
+* Cache provider responses
+
+### 4. Normalize user preferences
+Replace JSON with something like below:
+* `user_sources`
+* `user_categories`
+* `user_authors`
+
+### 5. Add observability
+* Structured logging
+* Ingestion metrics
+* Queue monitoring
+
+### 6. Add user-specific feeds
+* User-specific feeds endpoint or by default on `/api/v1/articles`
+
+### 7. Improve test coverage
+* HTTP mock tests
+* Performance tests
+* Contract tests
+
+### 8. Introduce Repository Layer for Remaining Models
+
+Currently, some domain models are accessed directly within services such as `ArticleIngestionService`. To further improve separation of concerns and align with the existing architecture, a repository layer should be introduced for these models.
+
+This would ensure that all data access logic is encapsulated within dedicated repositories and injected into services via dependency injection. It improves testability, consistency across the codebase, and adherence to the repository pattern already used in the `Article` domain.
+
+---
+
+## 🧠 Key Tradeoffs
+
+| Decision | Tradeoff |
+| :--- | :--- |
+| **DTO layer** | Extra abstraction but better isolation |
+| **Repository pattern** | More structure, more files |
+| **Queue-based sync** | Eventual consistency |
+| **JSON preferences** | Simplicity over normalization |
+
+---
+
+## 🚀 Getting Started
+
+### Install dependencies
+```bash
+composer install
+```
+
+### Start environment (Laravel Sail)
+```bash
+./vendor/bin/sail up -d
+```
+
+### Run migrations
+```bash
+./vendor/bin/sail artisan migrate --seed
+```
+
+### Sync news manually
+```bash
+./vendor/bin/sail artisan news:sync
+```
+
+### Sync news automatically
+```bash
+* * * * * ./vendor/bin/sail artisan schedule:run >> /dev/null 2>&1
+```
+
+### Run queue worker
+```bash
+./vendor/bin/sail artisan queue:work --queue=news-sync
+```
+
+---
+
+## 📌 Notes
+* External providers are partially implemented for demo/testing purposes.
+* System designed for extensibility and scalability.
+* Focus on clean architecture and maintainability.
